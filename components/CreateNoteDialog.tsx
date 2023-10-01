@@ -1,7 +1,18 @@
+"use client";
 import { Plus } from "lucide-react";
-import { Dialog, DialogContent, DialogTrigger } from "./ui/dialog";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "./ui/dialog";
+import { FormEvent, useState } from "react";
+import { Input } from "./ui/input";
+import { Button } from "./ui/button";
 
 export default function CreateNoteDialog(){
+
+    const [input,setInput]=useState("");
+
+    function handleSubmit(e:FormEvent){
+        e.preventDefault();
+    }
+
     return (
         <Dialog>
             <DialogTrigger>
@@ -16,7 +27,35 @@ export default function CreateNoteDialog(){
                 </div>
             </DialogTrigger>
             <DialogContent>
-                
+                <DialogHeader>
+                    <DialogTitle>
+                        New Note Book
+                    </DialogTitle>
+                    <DialogDescription>
+                        You can create a new note by clicking below.
+                    </DialogDescription>
+                </DialogHeader>
+                <form onSubmit={handleSubmit}>
+                    <Input
+                        value={input}
+                        onChange={(e)=>setInput(e.target.value)}
+                        placeholder="name..."
+                    />
+                    <div className="h-4">
+                    </div>
+                    <div className="flex items-center justify-center gap-2 w-full">
+                        <Button type="reset" variant={"secondary"}>
+                            Cancel
+                        </Button>
+                        <Button
+                            type="submit"
+                            className="bg-green-600"
+                            
+                        >
+                            Create
+                        </Button>
+                    </div>
+                </form>
             </DialogContent>
         </Dialog>
     )
