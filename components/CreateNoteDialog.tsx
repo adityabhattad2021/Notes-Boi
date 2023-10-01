@@ -1,5 +1,5 @@
 "use client";
-import { Axis3DIcon, Plus, Router } from "lucide-react";
+import { Axis3DIcon, Loader, Plus, Router } from "lucide-react";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "./ui/dialog";
 import { FormEvent, useState } from "react";
 import { Input } from "./ui/input";
@@ -84,8 +84,13 @@ export default function CreateNoteDialog(){
                         <Button
                             type="submit"
                             className="bg-green-600"
-                            
+                            disabled={createNotebook.isLoading}
                         >
+                            {createNotebook.isLoading && (
+                                <Loader
+                                    className="w-4 h-4 mr-2 animate-spin"
+                                />
+                            )}
                             Create
                         </Button>
                     </div>
