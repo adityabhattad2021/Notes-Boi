@@ -1,5 +1,7 @@
 import DeleteNoteButton from "@/components/DeleteNoteButton";
+import TipTapEditor from "@/components/TipTapEditor";
 import { Button } from "@/components/ui/button";
+import { clerk } from "@/lib/clerk-server";
 import { db } from "@/lib/db";
 import { $notes } from "@/lib/db/schema";
 import { auth } from "@clerk/nextjs";
@@ -19,6 +21,9 @@ export default async function NotebookPage({params:{noteId}}:NotebookPageProps){
     if (!userId) {
         return redirect("/dashboard");
     }
+
+    const user = await clerk.users.getUser(userId);
+
     const notes = await db
                         .select()
                         .from($notes)
@@ -42,13 +47,13 @@ export default async function NotebookPage({params:{noteId}}:NotebookPageProps){
                     </Link>
                     <div className="w-3"></div>
                     <span className="font-semibold">
-                        user.firstname user.lastname
+                        {user?.firstName} {user?.lastName }
                     </span>
                     <span className="inline-block mx-1">
                         /
                     </span>
                     <span className="text-stone-500 font-semibold">
-                        note.name
+                        {note.name}
                     </span>
                     <div className="ml-auto">
                         <DeleteNoteButton
@@ -58,7 +63,7 @@ export default async function NotebookPage({params:{noteId}}:NotebookPageProps){
                 </div>
                 <div className="h-4"></div>
                 <div className="border-stone-200 shadow-xl border rounded-lg px-16 py-8 w-full">
-                    Text Editor.
+                    <TipTapEditor note={note}/>
                 </div>
             </div>
         </div>
