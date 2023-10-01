@@ -1,5 +1,6 @@
 import { db } from "@/lib/db";
 import { $notes } from "@/lib/db/schema";
+import { uploadFileToFirebase } from "@/lib/firebase";
 import { generateImage, generateImagePrompt } from "@/lib/openai";
 import { auth } from "@clerk/nextjs";
 import { NextResponse } from "next/server";
@@ -33,12 +34,14 @@ export async function POST(req:Request){
         )
     }
 
+    const firebaseUrl = await uploadFileToFirebase(image_url,image_description);
+
     const note_ids = await db
                         .insert($notes)
                         .values({
                             name,
                             userId,
-                            imageUrl:image_url
+                            imageUrl:firebaseUrl
                         })
                         .returning({
                             insertedId:$notes.id
