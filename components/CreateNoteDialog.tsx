@@ -1,16 +1,50 @@
 "use client";
-import { Plus } from "lucide-react";
+import { Axis3DIcon, Plus, Router } from "lucide-react";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "./ui/dialog";
 import { FormEvent, useState } from "react";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
+import { useMutation } from "@tanstack/react-query";
+import axios from "axios";
+import { useToast } from "./ui/use-toast";
+import { useRouter } from "next/navigation";
 
 export default function CreateNoteDialog(){
 
     const [input,setInput]=useState("");
+    const { toast } = useToast();
+    const router = useRouter();
+
+    const createNotebook = useMutation({
+        mutationFn:async ()=>{
+            const response = await axios.post("/api/create-notebook",{
+                name:input
+            })
+            return response.data;
+        },
+        onError:(error)=>{
+            console.log('[CREATE_NOTEBOOK_CLIENT_ERROR]: ',error);
+            toast({
+                variant:"destructive",
+                title:"Error while creating new notebook",
+                description:"there was an error while creating a new notebook, please try again later"
+            })
+        },
+        onSuccess:({note_id})=>{
+            toast({
+                title:"Successfully created a new notebook",
+                description:`New notebook with title: ${input} successfully created!`
+            })
+            router.push(`/notebook/${note_id}`)
+        }
+    })
 
     function handleSubmit(e:FormEvent){
         e.preventDefault();
+        if(input===""){
+            window.alert("Please enter a name for your notebook");
+        }
+        createNotebook.mutate(undefined);
     }
 
     return (
