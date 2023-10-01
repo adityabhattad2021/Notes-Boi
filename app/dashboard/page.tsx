@@ -64,15 +64,12 @@ export default async function DashboardPage(){
                             return (
                                 <Link href={`/notebook/${note.id}`} key={note.id}>
                                     <div className="border border-stone-300 rounded-lg overflow-hidden flex flex-col hover:shadow-xl transition hover:-translate-y-1">
-                                        {/* <Image
+                                        <Image
                                             width={400}
                                             height={200}
                                             alt={note.name}
                                             src={note.imageUrl||""}
-                                        /> */}
-                                        <div className="w-[400px] h-[200px]">
-                                            
-                                        </div>
+                                        />
                                         <div className="p-4">
                                             <h3 className="text-xl font-semibold text-gray-900">
                                                 {note.name}
